@@ -5,188 +5,138 @@ import random
 class RockPaperScissors:
     def __init__(self, root):
         self.root = root
-        self.root.title("✊ Rock Paper Scissors ✂️")
-        self.root.geometry("500x650")
+        self.root.title("Rock Paper Scissors")
+        self.root.geometry("420x580")
         self.root.resizable(False, False)
-        self.root.configure(bg="#1a1a2e")
+        self.root.configure(bg="#2c3e50")
         
         self.user_score = 0
         self.computer_score = 0
         self.choices = ['Rock', 'Paper', 'Scissors']
-        self.choice_emojis = {'Rock': '✊', 'Paper': '✋', 'Scissors': '✂️'}
-        self.choice_colors = {'Rock': '#e74c3c', 'Paper': '#3498db', 'Scissors': '#f39c12'}
+        self.emojis = {'Rock': '🪨', 'Paper': '📄', 'Scissors': '✂️'}
+        self.colors = {'Rock': '#e74c3c', 'Paper': '#3498db', 'Scissors': '#f39c12'}
         
-        self.setup_ui()
+        self.build_ui()
     
-    def setup_ui(self):
-        # Title with gradient effect
-        title_frame = tk.Frame(self.root, bg="#1a1a2e")
-        title_frame.pack(pady=30)
+    def build_ui(self):
+        # Title
+        tk.Label(self.root, text="🪨  ROCK  PAPER  SCISSORS  ✂️", 
+                 font=("Arial", 18, "bold"), fg="#ecf0f1", bg="#2c3e50").pack(pady=20)
         
-        tk.Label(title_frame, text="✊", font=("Segoe UI Emoji", 48), bg="#1a1a2e").pack(side=tk.LEFT)
-        tk.Label(title_frame, text="ROCK PAPER SCISSORS", font=("Segoe UI", 28, "bold"), 
-                 fg="#eee", bg="#1a1a2e").pack(side=tk.LEFT, padx=10)
-        tk.Label(title_frame, text="✂️", font=("Segoe UI Emoji", 48), bg="#1a1a2e").pack(side=tk.LEFT)
+        # Score board
+        score_frame = tk.Frame(self.root, bg="#2c3e50")
+        score_frame.pack(pady=10)
         
-        # Score board with modern cards
-        score_frame = tk.Frame(self.root, bg="#1a1a2e")
-        score_frame.pack(pady=20)
+        self.user_score_lbl = tk.Label(score_frame, text="YOU: 0", font=("Arial", 16, "bold"), 
+                                        fg="#2ecc71", bg="#2c3e50", width=12)
+        self.user_score_lbl.grid(row=0, column=0, padx=20)
         
-        self.user_score_card = self.create_score_card(score_frame, "YOU", self.user_score, "#27ae60", 0)
-        self.computer_score_card = self.create_score_card(score_frame, "CPU", self.computer_score, "#c0392b", 1)
+        tk.Label(score_frame, text="VS", font=("Arial", 16, "bold"), fg="#95a5a6", bg="#2c3e50").grid(row=0, column=1)
         
-        # VS divider
-        vs_label = tk.Label(score_frame, text="VS", font=("Segoe UI", 16, "bold"), 
-                           fg="#7f8c8d", bg="#1a1a2e")
-        vs_label.grid(row=0, column=1, padx=30)
+        self.comp_score_lbl = tk.Label(score_frame, text="CPU: 0", font=("Arial", 16, "bold"), 
+                                        fg="#e74c3c", bg="#2c3e50", width=12)
+        self.comp_score_lbl.grid(row=0, column=2, padx=20)
         
-        # Result display area
-        self.result_frame = tk.Frame(self.root, bg="#16213e", relief=tk.RAISED, bd=3)
-        self.result_frame.pack(pady=30, padx=40, fill=tk.X)
+        # Result area
+        self.result_frame = tk.Frame(self.root, bg="#34495e", relief=tk.RIDGE, bd=3)
+        self.result_frame.pack(pady=20, padx=30, fill=tk.X)
         
-        self.result_emoji = tk.Label(self.result_frame, text="🎮", font=("Segoe UI Emoji", 64), 
-                                     bg="#16213e")
-        self.result_emoji.pack(pady=20)
+        self.result_emoji = tk.Label(self.result_frame, text="❓", font=("Segoe UI Emoji", 50), bg="#34495e")
+        self.result_emoji.pack(pady=15)
         
-        self.result_text = tk.Label(self.result_frame, text="MAKE YOUR MOVE", 
-                                    font=("Segoe UI", 20, "bold"), fg="#f1c40f", bg="#16213e")
-        self.result_text.pack(pady=10)
+        self.result_text = tk.Label(self.result_frame, text="Choose below!", font=("Arial", 18, "bold"), 
+                                     fg="#f1c40f", bg="#34495e")
+        self.result_text.pack(pady=5)
         
-        self.detail_text = tk.Label(self.result_frame, text="", 
-                                    font=("Segoe UI", 12), fg="#bdc3c7", bg="#16213e")
-        self.detail_text.pack(pady=(0, 20))
+        self.detail_text = tk.Label(self.result_frame, text="", font=("Arial", 12), fg="#bdc3c7", bg="#34495e")
+        self.detail_text.pack(pady=(0, 15))
         
         # Choice display
-        choice_frame = tk.Frame(self.root, bg="#1a1a2e")
+        choice_frame = tk.Frame(self.root, bg="#2c3e50")
         choice_frame.pack(pady=10)
         
-        self.user_display = tk.Label(choice_frame, text="", font=("Segoe UI Emoji", 32), 
-                                     bg="#1a1a2e")
-        self.user_display.grid(row=0, column=0, padx=30)
+        self.user_choice_lbl = tk.Label(choice_frame, text="", font=("Segoe UI Emoji", 30), bg="#2c3e50")
+        self.user_choice_lbl.grid(row=0, column=0, padx=30)
         
-        tk.Label(choice_frame, text="→", font=("Segoe UI", 24), fg="#7f8c8d", bg="#1a1a2e").grid(row=0, column=1)
+        tk.Label(choice_frame, text="→", font=("Arial", 20), fg="#7f8c8d", bg="#2c3e50").grid(row=0, column=1)
         
-        self.computer_display = tk.Label(choice_frame, text="", font=("Segoe UI Emoji", 32), 
-                                         bg="#1a1a2e")
-        self.computer_display.grid(row=0, column=2, padx=30)
+        self.comp_choice_lbl = tk.Label(choice_frame, text="", font=("Segoe UI Emoji", 30), bg="#2c3e50")
+        self.comp_choice_lbl.grid(row=0, column=2, padx=30)
         
-        # Buttons with modern styling
-        btn_frame = tk.Frame(self.root, bg="#1a1a2e")
-        btn_frame.pack(pady=30)
+        # Buttons
+        btn_frame = tk.Frame(self.root, bg="#2c3e50")
+        btn_frame.pack(pady=25)
         
         for i, choice in enumerate(self.choices):
-            btn = self.create_modern_button(btn_frame, choice, self.choice_emojis[choice], 
-                                            self.choice_colors[choice], 
-                                            lambda c=choice: self.play(c))
-            btn.grid(row=0, column=i, padx=15)
+            self.make_button(btn_frame, choice, i)
         
-        # Reset button
-        reset_frame = tk.Frame(self.root, bg="#1a1a2e")
-        reset_frame.pack(pady=20)
-        
-        reset_btn = tk.Button(reset_frame, text="🔄 RESET SCORE", font=("Segoe UI", 12, "bold"),
-                             bg="#34495e", fg="#ecf0f1", activebackground="#2c3e50",
-                             activeforeground="#ecf0f1", bd=0, padx=30, pady=12,
-                             cursor="hand2", command=self.reset_score)
-        reset_btn.pack()
-        
-        # Footer
-        tk.Label(self.root, text="Built with Python & Tkinter", font=("Segoe UI", 9), 
-                 fg="#555", bg="#1a1a2e").pack(side=tk.BOTTOM, pady=10)
+        # Reset
+        tk.Button(self.root, text="🔄 Reset Score", font=("Arial", 11, "bold"),
+                  bg="#95a5a6", fg="#2c3e50", activebackground="#7f8c8d",
+                  bd=0, padx=20, pady=8, cursor="hand2",
+                  command=self.reset).pack(pady=15)
     
-    def create_score_card(self, parent, label, score, color, col):
-        card = tk.Frame(parent, bg=color, relief=tk.RAISED, bd=3)
-        card.grid(row=0, column=col, padx=10)
+    def make_button(self, parent, choice, col):
+        color = self.colors[choice]
+        emoji = self.emojis[choice]
         
-        tk.Label(card, text=label, font=("Segoe UI", 11, "bold"), fg="#fff", bg=color).pack(padx=20, pady=(10, 0))
-        score_label = tk.Label(card, text=str(score), font=("Segoe UI", 36, "bold"), 
-                               fg="#fff", bg=color)
-        score_label.pack(padx=20, pady=(0, 10))
-        return score_label
-    
-    def create_modern_button(self, parent, text, emoji, color, command):
-        btn_frame = tk.Frame(parent, bg=color, relief=tk.RAISED, bd=4)
+        btn = tk.Button(parent, text=f"{emoji}\n{choice}", font=("Arial", 14, "bold"),
+                        fg="white", bg=color, activebackground=self.darken(color),
+                        activeforeground="white", bd=0, width=8, height=3,
+                        cursor="hand2",
+                        command=lambda c=choice: self.play(c))
+        btn.grid(row=0, column=col, padx=8)
         
-        btn = tk.Button(btn_frame, text=f"{emoji}\n{text}", font=("Segoe UI Emoji", 18, "bold"),
-                       fg="#fff", bg=color, activebackground=self.darken_color(color),
-                       activeforeground="#fff", bd=0, padx=25, pady=20,
-                       cursor="hand2", width=6, height=3, command=command)
-        btn.pack()
-        
-        # Hover effects
-        btn.bind("<Enter>", lambda e: btn.config(bg=self.darken_color(color)))
+        btn.bind("<Enter>", lambda e: btn.config(bg=self.darken(color)))
         btn.bind("<Leave>", lambda e: btn.config(bg=color))
-        
-        return btn_frame
     
-    def darken_color(self, color):
-        color_map = {
-            '#e74c3c': '#c0392b',
-            '#3498db': '#2980b9',
-            '#f39c12': '#d35400'
-        }
-        return color_map.get(color, color)
+    def darken(self, hex_color):
+        return {'#e74c3c': '#c0392b', '#3498db': '#2980b9', '#f39c12': '#d35400'}.get(hex_color, hex_color)
     
-    def play(self, user_choice):
-        computer_choice = random.choice(self.choices)
+    def play(self, user):
+        comp = random.choice(self.choices)
         
-        # Animate choices
-        self.user_display.config(text=self.choice_emojis[user_choice])
-        self.computer_display.config(text=self.choice_emojis[computer_choice])
+        self.user_choice_lbl.config(text=f"{self.emojis[user]}  You")
+        self.comp_choice_lbl.config(text=f"CPU  {self.emojis[comp]}")
         
-        # Determine result
-        if user_choice == computer_choice:
-            result = "DRAW!"
-            emoji = "🤝"
-            color = "#f39c12"
-            detail = f"Both chose {user_choice}"
-        elif (user_choice == 'Rock' and computer_choice == 'Scissors') or \
-             (user_choice == 'Paper' and computer_choice == 'Rock') or \
-             (user_choice == 'Scissors' and computer_choice == 'Paper'):
-            result = "YOU WIN! 🎉"
-            emoji = "🏆"
-            color = "#27ae60"
-            detail = f"{user_choice} beats {computer_choice}"
+        if user == comp:
+            msg, emoji, color, detail = "DRAW!", "🤝", "#f39c12", f"Both picked {user}"
+        elif (user == 'Rock' and comp == 'Scissors') or \
+             (user == 'Paper' and comp == 'Rock') or \
+             (user == 'Scissors' and comp == 'Paper'):
+            msg, emoji, color, detail = "YOU WIN!", "🎉", "#27ae60", f"{user} beats {comp}"
             self.user_score += 1
-            self.user_score_card.config(text=str(self.user_score))
         else:
-            result = "YOU LOSE! 😢"
-            emoji = "💀"
-            color = "#e74c3c"
-            detail = f"{computer_choice} beats {user_choice}"
+            msg, emoji, color, detail = "YOU LOSE!", "😵", "#e74c3c", f"{comp} beats {user}"
             self.computer_score += 1
-            self.computer_score_card.config(text=str(self.computer_score))
         
-        # Update result display with animation
         self.result_frame.config(bg=color)
         self.result_emoji.config(text=emoji, bg=color)
-        self.result_text.config(text=result, fg="#fff", bg=color)
-        self.detail_text.config(text=detail, fg="#fff", bg=color)
+        self.result_text.config(text=msg, fg="white", bg=color)
+        self.detail_text.config(text=detail, fg="white", bg=color)
         
-        # Flash effect
-        self.root.after(100, lambda: self.result_frame.config(bg="#16213e"))
-        self.root.after(100, lambda: self.result_emoji.config(bg="#16213e"))
-        self.root.after(100, lambda: self.result_text.config(bg="#16213e"))
-        self.root.after(100, lambda: self.detail_text.config(bg="#16213e"))
+        self.user_score_lbl.config(text=f"YOU: {self.user_score}")
+        self.comp_score_lbl.config(text=f"CPU: {self.computer_score}")
+        
+        # Flash back to normal after 150ms
+        self.root.after(150, lambda: self.result_frame.config(bg="#34495e"))
+        self.root.after(150, lambda: self.result_emoji.config(bg="#34495e"))
+        self.root.after(150, lambda: self.result_text.config(bg="#34495e", fg="#f1c40f"))
+        self.root.after(150, lambda: self.detail_text.config(bg="#34495e", fg="#bdc3c7"))
     
-    def reset_score(self):
+    def reset(self):
         self.user_score = 0
         self.computer_score = 0
-        self.user_score_card.config(text="0")
-        self.computer_score_card.config(text="0")
-        self.user_display.config(text="")
-        self.computer_display.config(text="")
-        self.result_frame.config(bg="#16213e")
-        self.result_emoji.config(text="🎮", bg="#16213e")
-        self.result_text.config(text="MAKE YOUR MOVE", fg="#f1c40f", bg="#16213e")
-        self.detail_text.config(text="", bg="#16213e")
+        self.user_score_lbl.config(text="YOU: 0")
+        self.comp_score_lbl.config(text="CPU: 0")
+        self.user_choice_lbl.config(text="")
+        self.comp_choice_lbl.config(text="")
+        self.result_frame.config(bg="#34495e")
+        self.result_emoji.config(text="❓", bg="#34495e")
+        self.result_text.config(text="Choose below!", fg="#f1c40f", bg="#34495e")
+        self.detail_text.config(text="", bg="#34495e")
 
 if __name__ == "__main__":
     root = tk.Tk()
-    # Set window icon (optional)
-    try:
-        root.iconbitmap(default='')
-    except:
-        pass
     app = RockPaperScissors(root)
     root.mainloop()
