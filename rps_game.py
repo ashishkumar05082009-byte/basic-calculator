@@ -138,5 +138,8 @@ class RockPaperScissors:
 
 if __name__ == "__main__":
     root = tk.Tk()
+    root.attributes('-topmost', True)  # Force window to front
+    root.after(100, lambda: root.attributes('-topmost', False))
     app = RockPaperScissors(root)
+    root.update_idletasks()
     root.mainloop()
