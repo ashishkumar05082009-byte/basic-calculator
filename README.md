@@ -1,43 +1,44 @@
-# Rock Paper Scissors - School Project
+# School Projects - Python Games
 
-A simple GUI-based Rock Paper Scissors game built with Python and Tkinter.
+Two classic games built with Python & Tkinter for school projects.
 
-## Features
+## Games Included
 
-- Graphical User Interface (GUI) with buttons
+### 1. Rock Paper Scissors (`rps_game.py`)
+- GUI with emoji buttons (🪨 📄 ✂️)
 - Score tracking (You vs Computer)
-- Visual feedback for wins/losses/ties
-- Reset score functionality
-- Clean, responsive design
+- Visual win/lose/draw feedback
+- Reset button
 
-## Requirements
-
-- Python 3.x (Tkinter comes built-in)
+### 2. Chrome Dino Game (`dino_game.py`)
+- Endless runner clone of Chrome's offline dinosaur game
+- Jump over cacti 🌵 and duck under birds 🐦
+- Increasing difficulty (speed increases with score)
+- High score tracking
+- Cloud parallax background
 
 ## How to Run
 
+**Option 1: Double-click the .bat files**
+- `run_game.bat` - Rock Paper Scissors
+- `run_dino.bat` - Chrome Dino Game
+
+**Option 2: Command line**
 ```bash
 python rps_game.py
+python dino_game.py
 ```
 
-## How to Play
+## Dino Game Controls
+| Key | Action |
+|-----|--------|
+| SPACE / ↑ | Jump / Start game |
+| ↓ | Fast fall (while jumping) |
+| R | Restart (after game over) |
 
-1. Click **Rock**, **Paper**, or **Scissors** button
-2. Computer randomly chooses its move
-3. Winner is determined by standard rules:
-   - Rock beats Scissors
-   - Scissors beats Paper
-   - Paper beats Rock
-4. Scores update automatically
-5. Click "Reset Score" to start over
-
-## Project Structure
-
-```
-rps_game.py    # Main game file
-README.md      # This file
-```
+## Requirements
+- Python 3.x (Tkinter included)
+- Windows / Mac / Linux
 
 ## Author
-
 Ashish Kumar - School Project
